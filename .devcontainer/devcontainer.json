@@ -11,13 +11,29 @@
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// This can be used to network with other containers or the host.
-	"forwardPorts": [3000, 5432]
+	"forwardPorts": [3000, 5432],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "bundle install && rake db:setup",
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"github.vscode-github-actions",
+				"ms-azuretools.vscode-containers",
+				"yzhang.markdown-all-in-one",
+				"hediet.vscode-drawio",
+				"esbenp.prettier-vscode",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg",
+				"rebornix.ruby",
+				"mame.ruby-typeprof",
+				"soutaro.rbs-syntax",
+				"soutaro.steep-vscode"
+			]
+		}
+	}
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
