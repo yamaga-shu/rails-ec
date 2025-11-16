@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: .infra/local/app/Dockerfile
+    depends_on:
+      db:
+        condition: service_started
+    tty: true
+    volumes:
+      - ../:/app:cached
+
+  db:
+    image: postgres:18.1-trixie
+    restart: unless-stopped
+    volumes:
+      - ../.infra/local/db/data:/var/lib/postgresql/data
+      - ../.infra/local/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  postgres-data:
