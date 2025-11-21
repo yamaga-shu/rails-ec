@@ -43,3 +43,18 @@ services:
       - ./db/data:/var/lib/postgresql
       - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
     command: -c 'config_file=/etc/postgresql/postgresql.conf'
+
+  mail:
+    container_name: mail
+    build:
+      context: ./mail
+      dockerfile: Dockerfile
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    environment:
+      - MP_DATABASE=/data/mailpit.db
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./mail/data:/data
+    tty: true
