@@ -4,39 +4,39 @@ class Admin::Registrations::RegistrationsController < Devise::RegistrationsContr
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
-  # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  # GET /admin/sign_up
+  def new
+    super
+  end
 
-  # POST /resource
-  # def create
-  #   super
-  # end
+  # POST /admin
+  def create
+    super
+  end
 
-  # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  # GET /admin/edit
+  def edit
+    super
+  end
 
-  # PUT /resource
-  # def update
-  #   super
-  # end
+  # PUT /admin
+  def update
+    super
+  end
 
-  # DELETE /resource
-  # def destroy
-  #   super
-  # end
+  # DELETE /admin
+  def destroy
+    super
+  end
 
-  # GET /resource/cancel
+  # GET /admin/cancel
   # Forces the session data which is usually expired after sign
   # in to be expired now. This is useful if the user wants to
   # cancel oauth signing in/up in the middle of the process,
   # removing all OAuth session data.
-  # def cancel
-  #   super
-  # end
+  def cancel
+    super
+  end
 
   # protected
 

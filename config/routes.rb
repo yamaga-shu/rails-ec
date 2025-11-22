@@ -3,10 +3,17 @@ Rails.application.routes.draw do
   devise_for :admin, skip: :all
 
   devise_for :admin_database_authentication, class_name: "Admin::DatabaseAuthentication",
-    path: "admin", path_names: { sign_in: "login", sign_out: "logout" }
+    path: "admin", path_names: { sign_in: "login", sign_out: "logout" },
+    controllers: {
+      sessions: "admin/database_authentication/sessions_controller"
+    }
 
   devise_for :admin_registration, class_name: "Admin::Registration",
-    path: "admin"
+    path: "admin",
+    controllers: {
+      registrations: "admin/registrations/registration_controller",
+      confirmations: "admin/registrations/confirmation_controller"
+    }
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

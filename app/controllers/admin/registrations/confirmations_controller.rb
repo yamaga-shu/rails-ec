@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 class Admin::Registrations::ConfirmationsController < Devise::ConfirmationsController
-  # GET /resource/confirmation/new
-  # def new
-  #   super
-  # end
+  # GET /admin/confirmation/new
+  def new
+    super
+  end
 
-  # POST /resource/confirmation
-  # def create
-  #   super
-  # end
+  # POST /admin/confirmation
+  def create
+    super
+  end
 
-  # GET /resource/confirmation?confirmation_token=abcdef
-  # def show
-  #   super
-  # end
+  # GET /admin/confirmation?confirmation_token=abcdef
+  def show
+    super
+  end
 
   # protected
 
