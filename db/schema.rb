@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_22_065515) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_22_082507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -25,10 +25,23 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_22_065515) do
     t.index ["email"], name: "index_admin_database_authentications_on_email", unique: true
   end
 
+  create_table "admin_registrations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "admin_id", null: false
+    t.datetime "confirmation_sent_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "created_at", null: false
+    t.string "unconfirmed_email"
+    t.datetime "updated_at", null: false
+    t.index ["admin_id"], name: "index_admin_registrations_on_admin_id"
+    t.index ["confirmation_token"], name: "index_admin_registrations_on_confirmation_token", unique: true
+  end
+
   create_table "admins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   add_foreign_key "admin_database_authentications", "admins"
+  add_foreign_key "admin_registrations", "admins"
 end
