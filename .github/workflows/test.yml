@@ -24,7 +24,8 @@ jobs:
         working-directory: .infra/development
         run: |
           docker compose up -d db
-          docker compose build app
+          docker compose -f compose.yml -f compose.ci.yml build app
+          docker compose up -d app
 
       - name: Wait for database
         run: |
