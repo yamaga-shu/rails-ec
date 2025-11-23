@@ -26,27 +26,7 @@ class Admin::DatabaseAuthentication::RegistrationsController < Devise::Registrat
 
   # DELETE /admin
   def destroy
-    ActiveRecord::Base.transaction do
-      # 関連するAdminを取得
-      admin = resource.admin
-
-      # Adminを削除
-      # model 定義により、関連する
-      # - Admin::DatabaseAuthentication
-      # - Admin::Registration
-      # も削除される
-      admin.destroy! if admin
-
-      yield resource if block_given?
-
-      Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
-      set_flash_message! :notice, :destroyed
-      respond_with_navigational(resource) { redirect_to after_sign_out_path_for(resource_name) }
-    end
-  rescue ActiveRecord::RecordNotDestroyed => e
-    # トランザクション内でエラーが発生した場合の処理
-    flash[:alert] = "Account deletion failed: #{e.message}"
-    redirect_to edit_admin_database_authentication_registration_path
+    default_destroy
   end
 
   # GET /admin/cancel
@@ -88,7 +68,6 @@ class Admin::DatabaseAuthentication::RegistrationsController < Devise::Registrat
   # an Admin record, then associating it with Admin::DatabaseAuthentication.
   # This ensures data consistency in our separated model structure.
   #
-  # @return [void]
   # @raise [ActiveRecord::RecordInvalid] if validation fails on either model
   # @see Devise::RegistrationsController#create
   def default_create
@@ -130,5 +109,37 @@ class Admin::DatabaseAuthentication::RegistrationsController < Devise::Registrat
     clean_up_passwords resource
     set_minimum_password_length
     respond_with resource
+  end
+
+  # Destroys Admin and related records in transaction
+  #
+  # Handles the account deletion flow for admin users by deleting
+  # the Admin record, which cascades to Admin::DatabaseAuthentication
+  # and Admin::Registration through dependent: :destroy associations.
+  # This ensures data consistency and complete cleanup.
+  #
+  # @raise [ActiveRecord::RecordNotDestroyed] if deletion fails
+  # @see Devise::RegistrationsController#destroy
+  def default_destroy
+    ActiveRecord::Base.transaction do
+      # 関連するAdminを取得
+      admin = resource.admin
+
+      # Adminを削除
+      # model 定義により、関連する
+      # - Admin::DatabaseAuthentication
+      # - Admin::Registration
+      # も削除される
+      admin.destroy! if admin
+
+      Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+      set_flash_message! :notice, :destroyed
+      yield resource if block_given?
+      respond_with_navigational(resource) { redirect_to after_sign_out_path_for(resource_name), status: Devise.responder.redirect_status }
+    end
+  rescue ActiveRecord::RecordNotDestroyed => e
+    # トランザクション内でエラーが発生した場合の処理
+    flash[:alert] = "Account deletion failed: #{e.message}"
+    redirect_to edit_admin_database_authentication_registration_path
   end
 end
