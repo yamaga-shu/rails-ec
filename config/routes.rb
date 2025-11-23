@@ -2,14 +2,17 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   devise_for :admin, skip: :all
 
-  devise_for :admin_database_authentication, class_name: "Admin::DatabaseAuthentication",
-    path: "admin", path_names: { sign_in: "login", sign_out: "logout" },
+  devise_for :admin_database_authentications,
+    class_name: "Admin::DatabaseAuthentication",
+    path: "admin",
+    path_names: { sign_in: "login", sign_out: "logout" },
     controllers: {
       sessions: "admin/database_authentication/sessions",
       registrations: "admin/database_authentication/registrations"
     }
 
-  devise_for :admin_registration, class_name: "Admin::Registration",
+  devise_for :admin_registration,
+    class_name: "Admin::Registration",
     path: "admin",
     controllers: {
       confirmations: "admin/registrations/confirmations"

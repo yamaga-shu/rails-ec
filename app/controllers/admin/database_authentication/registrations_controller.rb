@@ -30,10 +30,11 @@ class Admin::DatabaseAuthentication::RegistrationsController < Devise::Registrat
       # 関連するAdminを取得
       admin = resource.admin
 
-      # Admin::DatabaseAuthenticationを削除
-      resource.destroy!
-
-      # Adminも削除
+      # Adminを削除
+      # model 定義により、関連する
+      # - Admin::DatabaseAuthentication
+      # - Admin::Registration
+      # も削除される
       admin.destroy! if admin
 
       yield resource if block_given?
@@ -44,7 +45,7 @@ class Admin::DatabaseAuthentication::RegistrationsController < Devise::Registrat
     end
   rescue ActiveRecord::RecordNotDestroyed => e
     # トランザクション内でエラーが発生した場合の処理
-    flash.now[:alert] = "Account deletion failed: #{e.message}"
+    flash[:alert] = "Account deletion failed: #{e.message}"
     redirect_to edit_admin_database_authentication_registration_path
   end
 
