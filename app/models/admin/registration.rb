@@ -1,7 +1,7 @@
 class Admin::Registration < ApplicationRecord
-  self.table_name = "admin_registraions"
+  self.table_name = "admin_registrations"
 
   belongs_to :admin
 
-  devise :registerable, :confirmable, :validatable
+  devise :confirmable
 end

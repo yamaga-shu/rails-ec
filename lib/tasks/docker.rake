@@ -18,7 +18,7 @@ namespace :docker do
 
   desc "Show Docker container logs"
   task :logs do
-    system("docker compose -f #{DOCKER_COMPOSE_FILE} logs -f")
+    system("docker compose -f #{DOCKER_COMPOSE_FILE} logs -f app")
   end
 
   desc "Execute shell in app container"
