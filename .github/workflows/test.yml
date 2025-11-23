@@ -1,0 +1,47 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create .env file
+        working-directory: .infra/development
+        run: cp .env.example .env
+
+      - name: Build and start services
+        working-directory: .infra/development
+        run: |
+          docker compose up -d db
+          docker compose build app
+
+      - name: Wait for database
+        run: |
+          timeout 60 bash -c 'until docker compose -f .infra/development/compose.yml exec -T db pg_isready -U postgres; do sleep 1; done'
+
+      - name: Setup database
+        working-directory: .infra/development
+        run: |
+          docker compose run --rm app bin/rails db:create db:schema:load
+
+      - name: Run tests
+        working-directory: .infra/development
+        run: |
+          docker compose run --rm app bin/rails test
+          docker compose run --rm app bin/rails test:system
+
+      - name: Cleanup
+        if: always()
+        working-directory: .infra/development
+        run: docker compose down -v
